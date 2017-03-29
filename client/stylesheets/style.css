@@ -1,0 +1,18 @@
+body {
+  background-color: #9ACDE0;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+/*Messaging Styles*/
+#chatroom {
+  width: 500px;
+  height: 470px;
+  background-color: palevioletred;
+  display: inline-block;
+}
+
+#m {
+  margin: 10px;
+}
