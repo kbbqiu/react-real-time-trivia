@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
 import { react } from 'react-dom'
+import axios from 'axios'
 import Answers from './Answers.jsx'
 import CurrentPlayers from './CurrentPlayers.jsx'
 import Trivia from './Trivia.jsx'
+import Chat from './Chatbox.jsx'
 
 class App extends Component {
   constructor(props) {
@@ -12,7 +14,6 @@ class App extends Component {
       answers: ['Love', 'React', 'SoFkingHard', 'Death'],
       answer: 'Love',
       players: [],
-      currentActiveUser: '',
       textValue: ''
     }
   }
@@ -22,27 +23,40 @@ class App extends Component {
     let triviaQuestion = <Trivia question={question} />
     let triviaAnswers = <Answers answers={answers} onClick={this.answerClick.bind(this)} />
     let playerRoom = <CurrentPlayers value={this.state.textValue} players={this.state.players} change={this.handleChange.bind(this)} newUser={this.newPlayer.bind(this)} />
+    let chatBox = <Chat />
 
     return (
       <div style={styles.container}>
         {playerRoom}
         {triviaQuestion}
         {triviaAnswers}
+        <div id="chatroom">
+          {chatBox}
+        </div>
       </div>
     );
   }
 
+  // event is the eventHandler and target refers to the actual object
   handleChange(event) {
     this.setState({ textValue: event.target.value });
   }
 
   newPlayer(playerName) {
     console.log('Adding new User!')
-    let { players } = this.state;
-    players.push(playerName);
+    let { players, textValue } = this.state;
+    players.push({ username: playerName, score: 0 });
+
+    // make a ajax call to post to create new User with score of 0
+    axios.post('/post', {
+        username: this.state.textValue
+      }).then((response => console.log(response))).catch((response) => console.log(response))
+
+    textValue = '';
 
     this.setState({
-      players
+      players,
+      textValue
     })
   }
 

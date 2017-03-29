@@ -6,7 +6,7 @@ class CurrentPlayers extends Component {
   render() {
 
     let currentPlayers = (this.props.players).map((player, i) => {
-      return <Player player={player} key={i}/>
+      return <Player player={player.username} score={player.score} key={i}/>
     })
 
     return (
