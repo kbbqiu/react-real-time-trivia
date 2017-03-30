@@ -1,18 +1,61 @@
+html {
+  height: 100%;
+}
+
 body {
-  background-color: #9ACDE0;
+  background-image: url("http://cdn.wallpapersafari.com/25/87/t2fEPv.jpg");
+  background-size: cover;                    
+  background-repeat: no-repeat;
+  background-position: center center; 
   margin: 0;
   padding: 0;
   text-align: center;
+  width: 100%;
+  min-height: 100%;
 }
 
-/*Messaging Styles*/
-#chatroom {
-  width: 500px;
-  height: 470px;
-  background-color: palevioletred;
+.newUserButton {
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
   display: inline-block;
+  font-size: 16px;
+  transition-duration: 0.4s;
+}
+
+.newUserButton:hover {
+  background-color: #9ACDE0;
+}
+
+.newUserBox {
+  border: 1px solid #d3d3d3;
+  margin-bottom: 20px;
+}
+
+.nameInput {
+  padding: 10px 35px
 }
 
 #m {
   margin: 10px;
+}
+
+.playerBox {
+  border: 1px solid #d3d3d3;
+  height: 83vh;
+}
+
+.player {
+  color: white;
+  font-size: 16px;
+  padding: 4px;
+  width: '100%';
+  height: '20px';
+}
+
+.Outside {
+  text-align: center;
 }

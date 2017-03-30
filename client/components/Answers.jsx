@@ -20,8 +20,16 @@ const styles = {
     listStyleType: 'none'
   },
   button: {
-    height:  '30px',
-    width: '200px'
+    height:  '60px',
+    width: '400px',
+    backgroundColor: '#FFFFFF',
+    border: '1px solid #F9405C',
+    marginBottom: '2px',
+    marginRight: '25px',
+    textDecoration: 'none',
+    display: 'inline-block',
+    fontSize: '16px',
+    transitionDuration: '0.4s',
   }
 }
 

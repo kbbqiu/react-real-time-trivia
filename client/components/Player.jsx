@@ -16,7 +16,7 @@ const styles = {
   userStyle: {
     width: '100%',
     height: '20px',
-    backgroundColor: 'white'
+    backgroundColor: 'rgb(112, 216, 255, 0.7)',
   },
   user: {
     width: '50%',

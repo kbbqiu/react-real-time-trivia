@@ -59,7 +59,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "0ed6aba53dcc87d84a0e"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "778dc9bd31b482980623"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotMainModule = true; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
@@ -5637,7 +5637,7 @@ exports = module.exports = __webpack_require__(117)(undefined);
 
 
 // module
-exports.push([module.i, "body {\n  background-color: #9ACDE0;\n  margin: 0;\n  padding: 0;\n  text-align: center;\n}\n\n/*Messaging Styles*/\n#chatroom {\n  width: 500px;\n  height: 470px;\n  background-color: palevioletred;\n  display: inline-block;\n}\n\n#m {\n  margin: 10px;\n}", ""]);
+exports.push([module.i, "html {\n  height: 100%;\n}\n\nbody {\n  background-image: url(\"http://cdn.wallpapersafari.com/25/87/t2fEPv.jpg\");\n  background-size: cover;                    \n  background-repeat: no-repeat;\n  background-position: center center; \n  margin: 0;\n  padding: 0;\n  text-align: center;\n  width: 100%;\n  min-height: 100%;\n}\n\n.newUserButton {\n  background-color: #4CAF50; /* Green */\n  border: none;\n  color: white;\n  padding: 15px 32px;\n  text-align: center;\n  text-decoration: none;\n  display: inline-block;\n  font-size: 16px;\n  transition-duration: 0.4s;\n}\n\n.newUserButton:hover {\n  background-color: #9ACDE0;\n}\n\n.newUserBox {\n  border: 1px solid #d3d3d3;\n  margin-bottom: 20px;\n}\n\n.nameInput {\n  padding: 10px 35px\n}\n\n#m {\n  margin: 10px;\n}\n\n.playerBox {\n  border: 1px solid #d3d3d3;\n  height: 83vh;\n}\n\n.player {\n  color: white;\n  font-size: 16px;\n  padding: 4px;\n  width: '100%';\n  height: '20px';\n}\n\n.Outside {\n  text-align: center;\n}", ""]);
 
 // exports
 
@@ -10842,10 +10842,6 @@ var _Trivia = __webpack_require__(113);
 
 var _Trivia2 = _interopRequireDefault(_Trivia);
 
-var _Chatbox = __webpack_require__(218);
-
-var _Chatbox2 = _interopRequireDefault(_Chatbox);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -10853,6 +10849,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var socket = io();
 
 var App = function (_Component) {
   _inherits(App, _Component);
@@ -10863,8 +10861,8 @@ var App = function (_Component) {
     var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
 
     _this.state = {
-      question: "In The Sword in the Stone, what does Merlin call The Greatest Force on Earth?",
-      answers: ['Love', 'React', 'SoFkingHard', 'Death'],
+      question: "In The Sword in the Stone, what/who does Merlin call The Greatest Force on Earth?",
+      answers: ['Love', 'Camelot', 'King Arthur', 'The Round Table'],
       answer: 'Love',
       players: [],
       textValue: ''
@@ -10877,25 +10875,58 @@ var App = function (_Component) {
     value: function render() {
       var _state = this.state,
           question = _state.question,
-          answers = _state.answers;
+          answers = _state.answers,
+          players = _state.players;
+
 
       var triviaQuestion = _react2.default.createElement(_Trivia2.default, { question: question });
       var triviaAnswers = _react2.default.createElement(_Answers2.default, { answers: answers, onClick: this.answerClick.bind(this) });
       var playerRoom = _react2.default.createElement(_CurrentPlayers2.default, { value: this.state.textValue, players: this.state.players, change: this.handleChange.bind(this), newUser: this.newPlayer.bind(this) });
-      var chatBox = _react2.default.createElement(_Chatbox2.default, null);
 
       return _react2.default.createElement(
         'div',
-        { style: styles.container },
+        { style: styles.body },
         playerRoom,
-        triviaQuestion,
-        triviaAnswers,
         _react2.default.createElement(
           'div',
-          { id: 'chatroom' },
-          chatBox
+          { style: styles.container },
+          triviaQuestion,
+          triviaAnswers
         )
       );
+    }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      var _this2 = this;
+
+      socket.on('new:user', function (username) {
+
+        _axios2.default.get('/get').then(function (response) {
+          var _state2 = _this2.state,
+              players = _state2.players,
+              textValue = _state2.textValue;
+
+          players = response.data;
+          textValue = '';
+          _this2.setState({
+            players: players,
+            textValue: textValue
+          });
+        });
+      });
+
+      socket.on('score', function (socketID) {
+        _axios2.default.get('/get').then(function (response) {
+          var players = _this2.state.players;
+
+          players = response.data;
+
+          _this2.setState({
+            players: players
+          });
+        });
+      });
     }
 
     // event is the eventHandler and target refers to the actual object
@@ -10903,52 +10934,59 @@ var App = function (_Component) {
   }, {
     key: 'handleChange',
     value: function handleChange(event) {
+      event.preventDefault();
       this.setState({ textValue: event.target.value });
     }
   }, {
     key: 'newPlayer',
     value: function newPlayer(playerName) {
       console.log('Adding new User!');
-      var _state2 = this.state,
-          players = _state2.players,
-          textValue = _state2.textValue;
+      var _state3 = this.state,
+          players = _state3.players,
+          textValue = _state3.textValue;
 
-      players.push({ username: playerName, score: 0 });
+      // make a ajax call to post to create new User with score of 0 and unique socket ID
 
-      // make a ajax call to post to create new User with score of 0
       _axios2.default.post('/post', {
-        username: this.state.textValue
+        username: this.state.textValue,
+        socketID: socket.id
       }).then(function (response) {
-        return console.log(response);
+        return console.log('response');
       }).catch(function (response) {
-        return console.log(response);
+        return console.log('response');
       });
 
-      textValue = '';
-
-      this.setState({
-        players: players,
-        textValue: textValue
-      });
+      socket.emit('new:user', playerName);
     }
   }, {
     key: 'answerClick',
     value: function answerClick(response) {
       console.log('I am answering!');
-      var _state3 = this.state,
-          question = _state3.question,
-          answers = _state3.answers,
-          answer = _state3.answer,
-          score = _state3.score;
+
+      var _state4 = this.state,
+          question = _state4.question,
+          answers = _state4.answers,
+          answer = _state4.answer,
+          score = _state4.score;
 
       // check if response is equal to the answer
-      // if it is, add a point to the user
+
+      if (response === answer) {
+        socket.emit('score', socket.id);
+        // if it is, add a point to the user by making a request to the server to update
+        _axios2.default.patch('/patch', {
+          socketID: socket.id
+        }).then(function (response) {
+          return console.log('hi');
+        }).catch(function (response) {
+          return console.log('hi');
+        });
+      }
 
       // change the question and answers and answer
-
-      var randomNum = Math.floor(Math.random() * 6);
-      question = listOfQuestions[randomNum];
-      answer = listOfAnswers[randomNum];
+      var randomNum = Math.floor(Math.random() * (disneyTrivia.length - 1));
+      question = disneyTrivia[randomNum].question;
+      answer = disneyTrivia[randomNum].answer;
 
       // picks a random position from 1 to 4 where to place the answer
       var randomPos = Math.floor(Math.random() * 4);
@@ -10956,7 +10994,7 @@ var App = function (_Component) {
 
       answers.forEach(function (entry, i) {
         if (entry !== answer) {
-          answers[i] = fillerWords[Math.floor(Math.random() * 8)];
+          answers[i] = disneyTrivia[randomNum].words[Math.floor(Math.random() * 5)];
         }
       });
 
@@ -10972,14 +11010,21 @@ var App = function (_Component) {
 }(_react.Component);
 
 var styles = {
-  container: {}
+  body: {
+    textAlign: 'center'
+  },
+  container: {
+    position: 'relative',
+    top: '300',
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    width: '500px',
+    margin: '0 auto',
+    padding: '2% 1%',
+    fontWeight: 'bold'
+  }
 };
 
-var listOfQuestions = ['In The Sword in the Stone, what does Merlin call The Greatest Force on Earth?', 'In Aladdin, what is the name of Jasmine’s pet tiger?', 'How did Walt’s Brother Roy propose to his wife Edna?', 'In Peter Pan, Captain Hook had a hook on which one of his hands?', 'What is now considered the fastest ride in Walt Disney World?', 'What author wrote the book that the animated feature The Jungle Book is based on?'];
-
-var listOfAnswers = ['Love', 'Rajah', 'Telegram', 'His Left', 'Test Track', 'Rudyard Kipling'];
-
-var fillerWords = ['Pretzel', 'Monkey', 'Dog', 'Sword', 'Bat', 'Crew', 'Ugly', 'Jackie Chan', 'Mickie Mouse', 'first', 'second', 'third'];
+var disneyTrivia = [{ question: 'What is Mr Toads Full Name', answer: 'J. Thaddeus Toad', words: ['John Green Toad', 'Mr Toads', 'Rudard Toad Kipling', 'Ralph Spagnuolo Toad', 'Toad Levi Mouzon'] }, { question: 'In Aladdin, what is the name of Jasmines pet tiger?', answer: "Rajah", words: ["Simba", "Mufasa", "Gorilla", "Monkey", "Angel"] }, { question: "What author wrote the book that the animated feature The Jungle Book is based on?", answer: "Rudyard Kipling", words: ["J. Thaddeus Kim", "Ralph Spagnuolo", "Levi Mouzon", "Ryan Cincina", "Abel James Porter"] }, { question: "When does Mary Poppins say she will leave the Banks' house?", answer: "When the WInd Changes", words: ["When the Sun Rises", "When the Sky Rains", "When the Breeze Changes", "When the Moon Rises", "When the Stars Shine"] }, { question: "In the Lion King, where does Mufasa and his family live?", answer: "Pride Rock", words: ["My Rock", "Rock Pride", "Pride Parade", "Rock Home", "Pride of the Rock"] }, { question: "What is the motto for the Rescue Aid Society in The Rescuers?", answer: "We Never Fail to do What is Right", words: ["We Always Fail to do the right thing", "Why do we always fail", "We never do anything right", "We always do what is right", "We are never wrong"] }, { question: "In Dumbo, where is Mrs. Jumbo when the stork delivers her baby?", answer: "In the circus Train", words: ["In the bathtub", "On the crazy train", "In the birdhouse", "Over the rainbow", "Aboard the ship"] }, { question: "What town is the setting for the Disney Movie 'The Love Bug?'", answer: "San Francisco", words: ["Los Angeles", "Tokyo", "New York", "San Jose", "Santa Barbara"] }, { question: "In Beauty and the Beast, how many egss does Gaston eat for breakfast?", answer: "5 Dozen", words: ["10 Dozen", "12 Dozen", "2 Dozen", "1 Dozen", "6 Dozen"] }, { question: "During the battle with Aladdin, what type of animal does Jafar transform himself into?", answer: "A Cobra", words: ["A Lion", "A Snake", "Slytherin", "A Wild Draco Malfoy", "A Serpent"] }, { question: "Which full length animated feature did Walt Disney originally consider having as a Live Action Film with Mary Martin having the lead role?", answer: "Peter Pan", words: ["Neverland", "Lost Boys", "Tinker Bell", "Wendy", "Captain Hook"] }, { question: "Before Mickey Mouse, what Disney character was suggested to be the Sorcerer's Apprentice in Fantasia?", answer: "Dopey", words: ["Sleepy", "Sneezy", "Drunky", "Mary", "Merry"] }, { question: "After being on earth, where did Hercules first meet his father Zeus?", answer: "In the Temple of Zeus", words: ["In the Temple of Athena", "In the Temple of Artemis", "In the temple of Hera", "In the Temple of Apollo", "In the temple of Hades"] }, { question: "In Toy Story, what game does the slinky play?", answer: "Checkers", words: ["Chess", "Chinese Checkers", "Rumey", "Solitaire", "Go Fish"] }, { question: "In Mary Poppins, what animal was on the end of Mary Poppins' umbrella that spoke?", answer: "A Parrot", words: ["A Dog", "A Cat", "An Owl", "A Pigeon", "A Hawk"] }, { question: "In Hercules, Hades promised not to harm Megara provided that Hercules give up his strength. How long did he have to agree to give up his strength for?", answer: "24 Hours", words: ["11 Days", "1 Day", "23 Hours", "7 Hours", "12 Hours"] }, { question: "What actor provided the voice of Lumiere in Beauty & the Beast?", answer: "Jerry Orbach", words: ["Gary Horbach", "Larry Orrock", "Harry Morbock", "Mary Snowbach", "Kevin Lorax"] }, { question: "Friday's Question:What is the name of the original novel that inspired the full length feature animation: The Hunchback of Notre Dame?", answer: "Notre Dame de Paris", words: ["Notre Dame de Franz", "Notre Dame di Florenz", "Notre Dame University", "Not your Dame", "Not Notre Dame of Anything"] }, { question: "Which Disney Full Length Animated Fetaure was the last one to use a storybook as an introduction in the begining of the movie?", answer: "Robin Hood", words: ["Robin Good", "Green Arrow", "Green Lantern", "Deadpool", "Christopher Robin"] }, { question: "In what full length animated feature would you find a villain named Sykes?", answer: "Oliver and Company", words: ["Kevin and Mary and Company", "Alpha and Omega", "Derek and Steven and Company", "Codesmith and Company", "Keepin' me Company"] }, { question: "In Aladdin, another actor was suggested to do the voice of the parrot Iago, who was it?", answer: "Danny DeVito", words: ["Josh Gad", "Christopher Paolini", "J.K. Rowling", "Jackie Chan", "Scarlet Johannson"] }, { question: "What was the name of the dragon (god wanna be) in Mulan?", answer: "Mushu", words: ["Mishu", "Miso", "Soup", "Mashu", "Machu"] }, { question: "In Lady & the Tramp, by what name did Tony call Tramp?", answer: "Butch", words: ["Dutch", "Ditch", "Bitch(Dog)", "Hitch", "Balto"] }, { question: "What was the name of the whale in Pinocchio?", answer: "Monstro", words: ["Monstros", "Monsters", "Monsteros", "Moby Dick", "White Whale"] }];
 
 exports.default = App;
 
@@ -11925,8 +11970,16 @@ var styles = {
     listStyleType: 'none'
   },
   button: {
-    height: '30px',
-    width: '200px'
+    height: '60px',
+    width: '400px',
+    backgroundColor: '#FFFFFF',
+    border: '1px solid #F9405C',
+    marginBottom: '2px',
+    marginRight: '25px',
+    textDecoration: 'none',
+    display: 'inline-block',
+    fontSize: '16px',
+    transitionDuration: '0.4s'
   }
 };
 
@@ -11982,15 +12035,23 @@ var CurrentPlayers = function (_Component) {
       return _react2.default.createElement(
         'div',
         { style: styles.container, className: 'currentPlayers' },
-        _react2.default.createElement('input', { type: 'text', value: this.props.value, onChange: this.props.change }),
         _react2.default.createElement(
-          'button',
-          { onClick: function onClick() {
-              _this2.props.newUser(_this2.props.value);
-            } },
-          'Create New User'
+          'div',
+          { className: 'newUserBox' },
+          _react2.default.createElement('input', { className: 'nameInput', type: 'text', placeholder: 'username...', value: this.props.value, onChange: this.props.change }),
+          _react2.default.createElement(
+            'button',
+            { className: 'newUserButton', onClick: function onClick() {
+                _this2.props.newUser(_this2.props.value);
+              } },
+            'Create User and Join Game'
+          )
         ),
-        currentPlayers
+        _react2.default.createElement(
+          'div',
+          { className: 'playerBox' },
+          currentPlayers
+        )
       );
     }
   }]);
@@ -12002,11 +12063,13 @@ var CurrentPlayers = function (_Component) {
 
 var styles = {
   container: {
+    position: 'relative',
     color: 'blue',
     width: '200px',
-    height: '800px',
-    backgroundColor: 'green',
-    float: 'left'
+    height: '100vh',
+    backgroundColor: 'rgba(255, 255, 255, 0.6)',
+    float: 'left',
+    padding: '10px'
   }
 };
 
@@ -12076,7 +12139,7 @@ var styles = {
   userStyle: {
     width: '100%',
     height: '20px',
-    backgroundColor: 'white'
+    backgroundColor: 'rgb(112, 216, 255, 0.7)'
   },
   user: {
     width: '50%',
@@ -12138,7 +12201,7 @@ var Trivia = function (_Component) {
 
 var styles = {
   trivia: {
-    color: 'Black',
+    color: '#f9405c',
     fontSize: '30px'
   }
 };
@@ -26895,65 +26958,6 @@ module.exports = function (css) {
 	return fixedCss;
 };
 
-
-/***/ }),
-/* 218 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = __webpack_require__(18);
-
-var _react2 = _interopRequireDefault(_react);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var Chat = function (_Component) {
-  _inherits(Chat, _Component);
-
-  function Chat() {
-    _classCallCheck(this, Chat);
-
-    return _possibleConstructorReturn(this, (Chat.__proto__ || Object.getPrototypeOf(Chat)).apply(this, arguments));
-  }
-
-  _createClass(Chat, [{
-    key: "render",
-    value: function render() {
-      return _react2.default.createElement(
-        "div",
-        { id: "m" },
-        _react2.default.createElement("input", null),
-        _react2.default.createElement(
-          "button",
-          null,
-          "Send"
-        )
-      );
-    }
-  }]);
-
-  return Chat;
-}(_react.Component);
-
-var styles = {
-  messages: {}
-};
-
-exports.default = Chat;
 
 /***/ })
 /******/ ]);

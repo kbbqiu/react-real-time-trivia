@@ -11,9 +11,14 @@ class CurrentPlayers extends Component {
 
     return (
       <div style={styles.container} className="currentPlayers">
-        <input type="text" value={this.props.value} onChange={this.props.change}/>
-        <button onClick={() => {this.props.newUser(this.props.value)}}>Create New User</button>
-        {currentPlayers}
+        <div className='newUserBox'>
+          <input className='nameInput' type="text" placeholder='username...' value={this.props.value} onChange={this.props.change}/>
+          <button className='newUserButton' onClick={() => {this.props.newUser(this.props.value)}}>Create User and Join Game</button>
+        </div>
+
+        <div className='playerBox'>
+          {currentPlayers}
+        </div>
       </div>
     );
   }
@@ -21,11 +26,13 @@ class CurrentPlayers extends Component {
 
 const styles = {
   container: {
+    position: 'relative',
     color: 'blue',
     width: '200px',
-    height: '800px',
-    backgroundColor: 'green',
-    float: 'left'
+    height: '100vh',
+    backgroundColor: 'rgba(255, 255, 255, 0.6)',
+    float: 'left',
+    padding: '10px'
   }
 }
 

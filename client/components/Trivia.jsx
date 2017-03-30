@@ -10,7 +10,7 @@ class Trivia extends Component {
 
 const styles = {
   trivia: {
-    color: 'Black',
+    color: '#f9405c',
     fontSize: '30px',
   }
 }
