@@ -59,7 +59,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "778dc9bd31b482980623"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "221b607f046521600f1f"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotMainModule = true; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
@@ -5637,7 +5637,7 @@ exports = module.exports = __webpack_require__(117)(undefined);
 
 
 // module
-exports.push([module.i, "html {\n  height: 100%;\n}\n\nbody {\n  background-image: url(\"http://cdn.wallpapersafari.com/25/87/t2fEPv.jpg\");\n  background-size: cover;                    \n  background-repeat: no-repeat;\n  background-position: center center; \n  margin: 0;\n  padding: 0;\n  text-align: center;\n  width: 100%;\n  min-height: 100%;\n}\n\n.newUserButton {\n  background-color: #4CAF50; /* Green */\n  border: none;\n  color: white;\n  padding: 15px 32px;\n  text-align: center;\n  text-decoration: none;\n  display: inline-block;\n  font-size: 16px;\n  transition-duration: 0.4s;\n}\n\n.newUserButton:hover {\n  background-color: #9ACDE0;\n}\n\n.newUserBox {\n  border: 1px solid #d3d3d3;\n  margin-bottom: 20px;\n}\n\n.nameInput {\n  padding: 10px 35px\n}\n\n#m {\n  margin: 10px;\n}\n\n.playerBox {\n  border: 1px solid #d3d3d3;\n  height: 83vh;\n}\n\n.player {\n  color: white;\n  font-size: 16px;\n  padding: 4px;\n  width: '100%';\n  height: '20px';\n}\n\n.Outside {\n  text-align: center;\n}", ""]);
+exports.push([module.i, "html {\n  height: 100%;\n  min-width: 1000px;\n  min-height: 800px;\n}\n\nbody {\n  background-image: url(\"http://cdn.wallpapersafari.com/25/87/t2fEPv.jpg\");\n  background-size: cover;                    \n  background-repeat: no-repeat;\n  background-position: center center; \n  margin: 0;\n  padding: 0;\n  text-align: center;\n  width: 100%;\n  min-height: 100%;\n}\n\n.newUserButton {\n  background-color: #4CAF50; /* Green */\n  border: none;\n  color: white;\n  padding: 15px 32px;\n  text-align: center;\n  text-decoration: none;\n  display: inline-block;\n  font-size: 16px;\n  transition-duration: 0.4s;\n}\n\n.newUserButton:hover {\n  background-color: #9ACDE0;\n}\n\n.newUserBox {\n  border: 1px solid #d3d3d3;\n  margin-bottom: 20px;\n}\n\n.nameInput {\n  padding: 10px 35px\n}\n\n#m {\n  margin: 10px;\n}\n\n.playerBox {\n  border: 1px solid #d3d3d3;\n  height: 83vh;\n}\n\n.player {\n  color: white;\n  font-size: 16px;\n  padding: 4px;\n  width: '100%';\n  height: '20px';\n}\n\n.Outside {\n  text-align: center;\n}", ""]);
 
 // exports
 
@@ -11015,7 +11015,7 @@ var styles = {
   },
   container: {
     position: 'relative',
-    top: '300',
+    top: '180',
     backgroundColor: 'rgba(255, 255, 255, 0.9)',
     width: '500px',
     margin: '0 auto',

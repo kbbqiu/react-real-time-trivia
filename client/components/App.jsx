@@ -126,7 +126,7 @@ const styles = {
   },
   container: {
     position: 'relative',
-    top: '300',
+    top: '180',
     backgroundColor: 'rgba(255, 255, 255, 0.9)',
     width: '500px',
     margin: '0 auto',
